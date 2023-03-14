@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    mysql:
+        image: yappabe/mysql:5.7
+        ports: [3306]
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: dev
+            MYSQL_DATABASE: shop
+        labels:
+            com.symfony.server.service-prefix: 'DATABASE'
+
+    mail:
+        image: yappabe/mailhog
+        ports: [1025, 8025]
+        labels:
+             com.symfony.server.service-prefix: 'MAILER'
+
+    elasticsearch:
+         image: elasticsearch:6.8.12
+         ports: [9200]
+         environment:
+            - discovery.type=single-node
+            - ES_JAVA_OPTS=-Xms512M -Xmx750M
+         logging:
+             options:
+                 max-size: 2m
+
+volumes:
+  mysql-data:
